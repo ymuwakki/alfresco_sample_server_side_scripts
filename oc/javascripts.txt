@@ -1,0 +1,71 @@
+//print(document.properties['schema:person']);
+//print(document.properties['occ:people']);
+//document.properties['occ:people'] = document.properties['schema:person'];
+//print(document.properties['occ:people']);
+var y = '';
+for each (n in document.properties['schema:person'])
+{
+  y = y + n + ";";
+}
+document.properties['occ:people'] = y;
+document.properties['occ:hash'] = document.properties['armdup:hash'];
+y = '';
+for each (n in document.properties['schema:organization'])
+{
+  y = y + n + ";";
+}
+document.properties['occ:organizations'] = y;
+y = '';
+for each (n in document.properties['schema:textLines'])
+{
+  y = y + n + ";";
+}
+document.properties['occ:textlines'] = y;
+document.save();
+
+
+----------------------
+
+//var x = document.properties['armdup:hash'];
+//var allDupes = duplicateDetectionService.countDuplicatesByHash(x);
+//var nodeRefs = duplicateDetectionService.findNodeRefs(hash, 
+													  
+//var others = duplicateDetectionService.findDuplicatesOf(nodeRefData["nodeRef"]);
+
+var duplicates = duplicateDetectionService.findDuplicatesOf(document.nodeRef);
+
+//var y = duplicates.size();
+//logger.log(y);
+//var z = duplicates.isEmpty();
+//logger.log(z);
+
+//loggerJSON.parse(duplicates[0]);
+for (i = 0; i < duplicates.size(); i++) {
+  logger.log(duplicates.get(i).nodeRef);
+  var x = duplicates.get(i).nodeRef;
+  var a = search.findNode(x);
+  a.properties['occ:isduplicate'] = true;
+  a.save();
+  logger.log(a.properties['occ:isduplicate']);
+}
+	//function(m) { return true; });
+//logger.log(allDupes);
+ 
+
+// Step one: for every hash, go through each document, and get the info
+/*
+var allDupes =  duplicateDetectionService.findDuplicates();
+for (hash in allDupes) {
+    var nodeRefCount = duplicateDetectionService.countNodeRefs(hash);
+    var nodeRefs = duplicateDetectionService.findNodeRefs(hash, true)[hash]["results"];
+    
+    logger.warn(hash + " == " + nodeRefCount + " (actual = " + nodeRefs.size() + ")");
+    for (i = 0 ; i < nodeRefs.size() ; i++) {
+        var nodeRefData = nodeRefs.get(i);
+        var others = duplicateDetectionService.findDuplicatesOf(nodeRefData["nodeRef"]);
+        logger.warn(nodeRefData);
+        logger.warn("OTHERS = " + others);
+    }
+    logger.warn(nodeRefs);
+}
+*/

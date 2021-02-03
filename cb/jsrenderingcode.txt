@@ -1,0 +1,202 @@
+This version works:
+
+function renderFormat(format, ext, path){  
+var renditionDef = renditionService.createRenditionDefinition( 'cm:' + ext + 'Export', 'reformat');
+renditionDef.parameters['mime-type'] = format;
+if (path != null) {
+	renditionDef.parameters['destination-path-template'] = path;
+}
+var pdfnode = renditionService.render(document, renditionDef);
+}
+renderFormat('application/pdf', 'pdf', "Company Home/Sites/atlanta-international-airport-edms/documentLibrary/PDF Renditions/" + document.name + '.pdf');
+
+
+
+
+workspace://SpacesStore/f5400dfa-8e71-4080-a61a-4be84ebbe6e0
+
+
+var renderingEngineName = 'reformat';
+var renditionDefinitionName = 'cm:xxRenditionDef';
+var renditionDef = renditionService.createRenditionDefinition(renditionDefinitionName, renderingEngineName);
+renditionDef.parameters['mime-type'] = 'text/html';
+var xxRendition= renditionService.render(document, renditionDef);
+print (xxRendition);
+
+
+var transformedNode = document.transformDocument("image/jpeg");
+print ( transformedNode );
+
+var transformedNode = document.transformDocument("text/html");
+print ( transformedNode );
+
+var transformedNode = document.transformDocument("application/pdf");
+print ( transformedNode );
+
+
+## How to do an XSL Transformation
+var xsltNode = "workspace://SpacesStore/f5400dfa-8e71-4080-a61a-4be84ebbe6e0";
+var renditionDefName = "cm:htmlRenditionDef";
+var renderingEngineName = "xsltRenderingEngine";
+var xsltNode = "workspace://SpacesStore/ddf989af-9a51-415b-822b-fde037c13cf7";
+var destination = document.displayPath + "/" + document.name + "rendered.html";
+var renditionDef = renditionService.createRenditionDefinition(renditionDefName, renderingEngineName);
+renditionDef.parameters["template_node"] = search.findNode(xsltNode);
+renditionDef.parameters["destination-path-template"] = destination;
+renditionDef.parameters['mime-type'] = 'text/html';
+renditionDef.execute(document);
+
+workspace://SpacesStore/ddf989af-9a51-415b-822b-fde037c13cf7
+
+## How to retrieve an Alfresco image from the XSL file?
+  <img alt="">
+    <xsl:attribute name="src">
+		<xsl:value-of select="catalog/graphic"/>
+    </xsl:attribute>
+  </img>
+##In the XML make sure the value is a full path:
+<graphic>http://localhost:8080/share/proxy/alfresco/slingshot/node/content/workspace/SpacesStore/e9266349-3a83-4347-bedb-d2eaa0da6860/THUMB_01Paintings.jpg</graphic>
+ 
+In XSL, all variables are in the namespace alf.  Thus, to access the value of the parent_path, use the XSL expression:
+<xsl:value-of select='$alf:parent_path'/>
+<xsl:value-of select="concat($alf:request_context_path,./nf:Template1/nf:Image)"/>
+
+code: xsl, inc?, jar, css, js, jsp, java
+Output formats:
+jpeg image/jpeg
+pdf application/pdf 
+gif image/gif
+text text/plain
+html text/html
+crtext text/plain
+png image/png
+bmp image/bmp
+tiff image/tiff
+
+function renderFormat(format, ext, path){  
+var renditionDef = renditionService.createRenditionDefinition( 'cm:' + ext + 'Export', 'reformat');
+renditionDef.parameters['mime-type'] = format;
+if (path != null) {
+	renditionDef.parameters['destination-path-template'] = path;
+}
+renditionService.render(document, renditionDef);
+}
+renderFormat('application/pdf', 'pdf', '/Company Home/Sites/co-editing/documentLibrary/' + ${name} + '.' + ext);
+
+
+renderFormat('application/pdf', 'pdf', '/Company Home/Sites/co-editing/documentLibrary/' + ${name} + '.' + ext);
+
+renderFormat('image/jpeg', 'jpg');
+renderFormat('image/gif', 'gif');
+renderFormat('text/plain', 'txt');
+renderFormat('text/html', 'html');
+renderFormat('image/png', 'png');
+renderFormat('image/bmp', 'bmp');
+renderFormat('image/tiff', 'tiff');
+
+var renditionDef = renditionService.createRenditionDefinition('cm:cropResize','imageRenderingEngine');
+renditionDef.parameters['destination-path-template'] = "Company Home/Sites/co-editing/documentLibrary/${name}_resized.jpg";
+renditionDef.parameters['isAbsolute'] = true;
+renditionDef.parameters['xSize'] = 50;
+renditionDef.parameters['ySize'] = 50;
+renditionService.render(document, renditionDef);
+var renditions = renditionService.getRenditions(document);
+
+
+
+
+cfm
+ram?
+swf?
+svg?
+mp3, msw8, excel8book, flash, wp8, doc, zip, mp4, ppt8, xsd, lvr, 
+
+Web Publisher 
+
+Web Ready Format (Web Page Output)
+Content Template - provide layout, folder location, format, properties, content, default WF, etc.
+Supporting File - associated to the template
+- Presentation File (XSL stylesheets or HTML wrappers) 
+- Merging of presentation file and content = web page
+- Editor rules file - used  by Editor.
+- Previews - 
+
+Web Publisher editor
+- uses XML based content templates
+- uses Editor Rules File - how content is displayed in the editor, which elements to used
+- XSL Presentation File
+- upon save, content is transformed using XSL and output is new web ready rendition
+- 
+1. Author selects the template
+2. Web Pub copies template to a new content XML File
+3. Author opens the content file
+4. Web Publisher uses the rules file to determine how the content is displayed in editor
+5. Author edits content
+6. Author does a web preview or saves file, transformation engine merges content file and presentation file to create web page
+
+So do we have to follow this? Not really. The editor can do its thing and we have to transform it using the XSLT.
+So maybe we do not need to have a rules file.
+They never mentioned it.
+
+
+	Provides support for rendering content nodes into other forms, known as renditions. 
+	The rendition nodes are derived from their source node and as such can be updated automatically when their source node's content (or other properties) are changed.
+	Examples of renditions include:
+	1. reformatted content (essentially a transformation from one MIME-type to another), 
+	2. rescaled images (including thumbnails), 
+	3. and the output of a Freemarker temaplte
+	4. output from an XSLT template. 
+	Renditions can be performed synchronously or asynchronously and can be created at a specified location within the Alfresco repository.
+	By default they are created as primary children of their source node but it is possible to have them created at other nodes specified explicitly or as templated paths.
+	
+Formats to auto convert to PDF
+(images can be converted to TIFF using imagemagick and then to PDF.)
+
+application/dita+xml = org.alfresco.repo.content.transform.TextToPdfContentTransformer
+application/msword = Using JOD Converter / Open Office
+application/rtf = Using JOD Converter / Open Office
+application/vnd.apple.keynote = org.alfresco.repo.content.transform.AppleIWorksContentTransformer
+application/vnd.apple.numbers = org.alfresco.repo.content.transform.AppleIWorksContentTransformer
+application/vnd.apple.pages = org.alfresco.repo.content.transform.AppleIWorksContentTransformer
+application/vnd.ms-excel = Using JOD Converter / Open Office
+application/vnd.ms-excel.sheet.binary.macroenabled.12 = Using JOD Converter / Open Office
+application/vnd.ms-excel.sheet.macroenabled.12 = Using JOD Converter / Open Office
+application/vnd.ms-excel.template.macroenabled.12 = Using JOD Converter / Open Office
+application/vnd.ms-outlook = Complex via: text/plain
+application/vnd.ms-powerpoint = Using JOD Converter / Open Office
+application/vnd.ms-powerpoint.addin.macroenabled.12 = Using JOD Converter / Open Office
+application/vnd.ms-powerpoint.presentation.macroenabled.12 = Using JOD Converter / Open Office
+application/vnd.ms-powerpoint.slide.macroenabled.12 = Using JOD Converter / Open Office
+application/vnd.ms-powerpoint.template.macroenabled.12 = Using JOD Converter / Open Office
+application/vnd.ms-word.document.macroenabled.12 = Using JOD Converter / Open Office
+application/vnd.ms-word.template.macroenabled.12 = Using JOD Converter / Open Office
+application/vnd.oasis.opendocument.graphics = Using JOD Converter / Open Office
+application/vnd.oasis.opendocument.presentation = Using JOD Converter / Open Office
+application/vnd.oasis.opendocument.presentation-template = Using JOD Converter / Open Office
+application/vnd.oasis.opendocument.spreadsheet = Using JOD Converter / Open Office
+application/vnd.oasis.opendocument.spreadsheet-template = Using JOD Converter / Open Office
+application/vnd.oasis.opendocument.text = Using JOD Converter / Open Office
+application/vnd.oasis.opendocument.text-template = Using JOD Converter / Open Office
+application/vnd.openxmlformats-officedocument.presentationml.presentation = Using JOD Converter / Open Office
+application/vnd.openxmlformats-officedocument.presentationml.slide = Using JOD Converter / Open Office
+application/vnd.openxmlformats-officedocument.presentationml.template = Using JOD Converter / Open Office
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet = Using JOD Converter / Open Office
+application/vnd.openxmlformats-officedocument.spreadsheetml.template = Using JOD Converter / Open Office
+application/vnd.openxmlformats-officedocument.wordprocessingml.document = Using JOD Converter / Open Office
+application/vnd.openxmlformats-officedocument.wordprocessingml.template = Using JOD Converter / Open Office
+application/vnd.sun.xml.calc = Using JOD Converter / Open Office
+application/vnd.sun.xml.calc.template = Using JOD Converter / Open Office
+application/vnd.sun.xml.impress = Using JOD Converter / Open Office
+application/vnd.sun.xml.impress.template = Using JOD Converter / Open Office
+application/vnd.sun.xml.writer = Using JOD Converter / Open Office
+application/vnd.sun.xml.writer.template = Using JOD Converter / Open Office
+application/vnd.visio = Using JOD Converter / Open Office
+application/vnd.visio2013 = Using JOD Converter / Open Office
+application/wordperfect = Using JOD Converter / Open Office
+image/tiff = Proxy via: com.sun.proxy.$Proxy33 (Version: ImageMagick 6.9.1-10 Q16 x86_64 2015-08-12 http://www.imagemagick.org Copyright: Copyright (C) 1999-2015 ImageMagick Studio LLC License: http://www.imagemagick.org/script/license.php Features: Cipher DPC Modules Delegates (built-in): freetype jng jpeg ltdl png tiff wmf)
+message/rfc822 = Complex via: text/plain
+text/csv = org.alfresco.repo.content.transform.TextToPdfContentTransformer
+text/html = Complex via: application/vnd.oasis.opendocument.text
+text/plain = Using JOD Converter / Open Office
+text/xml = org.alfresco.repo.content.transform.TextToPdfContentTransformer
+	
