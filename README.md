@@ -6,3 +6,5 @@ The scripts can be used to :
 2. move documents from a regular site to the Records Management (RM) site into a folder plan auto-creating folders
 3. to move documents from a WIP work-in-progress folder to a Published folder auto-creating folders
 etc.
+
+Each folder has similar code but for a different use case
